@@ -4,9 +4,9 @@ from nltk.stem import PorterStemmer, WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 import nltk
 
-for resource_name in ['punkt', 'stopwords', 'wordnet']:
+for resource_name in ["punkt", "stopwords", "wordnet"]:
     try:
-        nltk.data.find(f'tokenizers/{resource_name}')
+        nltk.data.find(f"tokenizers/{resource_name}")
     except:
         nltk.download(resource_name)
 
@@ -19,8 +19,9 @@ class Preprocessor:
         stop_words = set(stopwords.words("english"))
         words = [word for word in words if word not in stop_words]
 
-        words = [PorterStemmer().stem(WordNetLemmatizer().lemmatize(word))
-                 for word in words]
+        words = [
+            PorterStemmer().stem(WordNetLemmatizer().lemmatize(word)) for word in words
+        ]
         return " ".join(words)
 
     def process_articles(self, articles):

@@ -24,18 +24,20 @@ class Evaluator:
         """
         Evaluate the model on the given data.
         """
-        vectorizer, (query_keys, query_vals), (scrap_keys,
-                                               scrap_vals) = self.tf_idf()
+        vectorizer, (query_keys, query_vals), (scrap_keys, scrap_vals) = self.tf_idf()
         similarities = cosine_similarity(scrap_vals, query_vals)
 
         similarities = np.mean(similarities, axis=1)
         scrapped_files_ranking = {
-            url: similarities[idx] for idx, url in enumerate(scrap_keys)}
+            url: similarities[idx] for idx, url in enumerate(scrap_keys)
+        }
         sorted_ranking = sorted(
-            scrapped_files_ranking.items(), key=lambda x: x[1], reverse=True)
+            scrapped_files_ranking.items(), key=lambda x: x[1], reverse=True
+        )
 
-        self.visualizator.visualize_results(vectorizer, sorted_ranking,
-                                            query_keys, query_vals, scrap_keys, scrap_vals)
+        self.visualizator.visualize_results(
+            vectorizer, sorted_ranking, query_keys, query_vals, scrap_keys, scrap_vals
+        )
 
         return sorted_ranking
 
@@ -46,13 +48,19 @@ class Evaluator:
         vectorizer = TfidfVectorizer()
 
         scrapped_articles_keys, scrapped_articles_values = zip(
-            *self.scrapped_articles.items())
+            *self.scrapped_articles.items()
+        )
         scrapped_articles_vectorized = vectorizer.fit_transform(
-            scrapped_articles_values)
+            scrapped_articles_values
+        )
 
         visited_articles_keys, visited_articles_values = zip(
-            *self.visited_articles.items())
-        visited_articles_vectorized = vectorizer.transform(
-            visited_articles_values)
+            *self.visited_articles.items()
+        )
+        visited_articles_vectorized = vectorizer.transform(visited_articles_values)
 
-        return vectorizer, (visited_articles_keys, visited_articles_vectorized), (scrapped_articles_keys, scrapped_articles_vectorized)
+        return (
+            vectorizer,
+            (visited_articles_keys, visited_articles_vectorized),
+            (scrapped_articles_keys, scrapped_articles_vectorized),
+        )
